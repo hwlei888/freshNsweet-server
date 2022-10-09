@@ -29,13 +29,13 @@ db.on('error', err => {
 });
 
 
-// API routes *********************************************************
+// API routes GET / *********************************************************
 app.get('/', (req, res) => {
     console.log('Root route was requested.');
     res.json({hello: 'Welcome to freshNsweet'})
 })
 
-// Index of products: GET /products
+// Index of products: GET /products *********************************************************
 app.get('/products', async (req, res) => {
     
     try {
@@ -49,7 +49,7 @@ app.get('/products', async (req, res) => {
 }); // GET /flights
 
 
-// Index of users: GET /users
+// Index of users: GET /users *********************************************************
 app.get('/users', async(req, res) => {
 
     try{
@@ -63,6 +63,47 @@ app.get('/users', async(req, res) => {
         res.status(422).json({error: 'Db connection error'});
     }
 }); // GET /users
+
+
+// Product Details show route: GET /products/:id *********************************************************
+app.get('/products/:id', async (req, res) => {
+
+    try{
+        const product = await Product.findOne({_id: req.params.id});
+
+        console.log('product', product);
+
+        res.send({ product });
+
+    }catch(err){
+        console.log('Error finding product by ID:', req.params, err);
+        res.sendStatus(422);
+    }
+});
+
+
+// Categories show route: GET /fruit  *********************************************************
+app.get('/category/:title', async (req, res) => {
+
+    try{
+        // .find ('categories.title': 'Fruit')
+        //the first letter in find need to be upper case
+        // const paramsTtitle = req.params.title.charAt(0).toUpperCase() + req.params.title.slice(1);
+        const fruit = await Product.find({'categories.title': {'$regex': req.params.title, '$options': 'i'}});
+        // const fruit = await Product.find({'categories.title': {"$regex": "Fresh", "$options": "i" } });
+
+        console.log('fruit product', fruit);
+
+        // res.send({fruit});
+        res.json(fruit);
+
+    }catch(err){
+        console.log('Error finding category', err );
+        res.sendStatus(422);
+    }
+})
+
+
 
 
 

@@ -52,6 +52,78 @@ db.once('open', async() => {
             ]
         },
 
+        {
+            title: 'Red Watermelon Cut Quarter Each',
+            introduction: "Large oval fruit with a thick green skin and a sweet watery pink to red flesh. Often the deeper colored the flesh, the sweeter the taste. Watermelon's flesh contains about 6% sugar and it is comprised primarily of water. This seedless variety is perfect for kids.",
+            weight: 'Quarter Each',
+            price: 4.18,
+            like: 8,
+            categories: [
+                {title: 'Fruit'},
+                {title: 'Best Sellers'},
+                {title: 'Fresh Special'},
+            ], // category[]
+            images: [
+                {url: 'https://cdn0.woolworths.media/content/wowproductimages/large/120384.jpg'},
+                {url: 'https://www.enzazaden.com/us/-/media/images/enza-zaden/list-images-640x480/01_products-services/watermelon/p_2017003_red_amber.jpg'},
+                {url: 'https://hips.hearstapps.com/hmg-prod/images/repeated-watermelon-on-the-blue-background-royalty-free-image-1626974881.jpg'},
+            ]
+        },
+
+        {
+            title: 'Cavendish Bananas Each',
+            introduction: "Cavendish is the most popular banana variety in Australia, with firm, starchy flesh and available all year round. Ripe bananas are perfect for snacking, used in baking, fruit salads and smoothie.",
+            weight: 'Each',
+            price: 0.36,
+            like: 10,
+            categories: [
+                {title: 'Fruit'},
+                {title: 'Fresh Special'},
+            ], // category[]
+            images: [
+                {url: 'https://cdn0.woolworths.media/content/wowproductimages/large/133211.jpg'},
+                {url: 'https://images.theconversation.com/files/142716/original/image-20161021-1763-13xoceb.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=675.0&fit=crop'},
+                {url: 'https://modernfarmer.com/wp-content/uploads/2022/01/shutterstock_533882299.jpg'},
+            ]
+        },
+
+        {
+            title: 'Woolworths Butternut Pumpkin Cut Each',
+            introduction: "Butternut pumpkin, or butternut squash, has hard golden-brown skin with bright orange flesh on the inside. This pumpkin is versatile and delicious with a sweet, nutty taste. A perfect allrounder, you can roast, mash, fry, bake and even air-fry it.",
+            weight: 'Each',
+            price: 2.60,
+            like: 15,
+            categories: [
+                {title: 'Vegetable'},
+                {title: 'Australian Grown'},
+                {title: 'New Arrival'},
+            ], // category[]
+            images: [
+                {url: 'https://cdn0.woolworths.media/content/wowproductimages/large/147197.jpg'},
+                {url: 'https://cdn0.woolworths.media/content/wowproductimages/large/147197_1.jpg'},
+                {url: 'https://img.taste.com.au/HrwR8IZM/w720-h480-cfill-q80/taste/2020/03/april20_rice-stuffed-butternut-pumpkin-159628-1.jpg'},
+            ]
+        },
+
+        {
+            title: 'Hass Avocado Each',
+            introduction: "Famous for their smooth, buttery flesh Hass avocados are a delightful addition to any meal. They have a pebbly skin that changes colour as they ripen from green to purple-black. Store firm fruit on the bench for a day or two and move to the fridge to hold in a ripe and ready to eat state once they begin to soften.",
+            weight: 'Each',
+            price: 2.00,
+            like: 20,
+            categories: [
+                {title: 'Vegetable'},
+                {title: 'Australian Grown'},
+                {title: 'Best seller'},
+            ], // category[]
+            images: [
+                {url: 'https://cdn0.woolworths.media/content/wowproductimages/large/120080.jpg'},
+                {url: 'https://gregalder.com/yardposts/wp-content/uploads/2020/06/GEM-and-Hass-avocados-1024x866.jpg'},
+                {url: 'https://thumbs.dreamstime.com/b/ripe-hass-avocado-fruit-top-view-wooden-plate-spoon-161930497.jpg'},
+                {url: 'https://gourmandandgourmet.com.au/wp-content/uploads/mp/files/posts/images/shepardisthedevil.jpg'},
+            ]
+        },
+
     ]);
 
     console.log('products:', createdProducts);
