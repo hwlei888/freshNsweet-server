@@ -1,5 +1,7 @@
 
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+
 const Product = require('./Product');
 const User = require('./User');
 
@@ -33,7 +35,7 @@ db.once('open', async() => {
                 {url: 'https://cdn0.woolworths.media/content/wowproductimages/large/144607.jpg'},
                 {url: 'https://cdn-prod.medicalnewstoday.com/content/images/articles/320/320894/strawberry-on-white-background-to-represent-strawberry-tongue.jpg'},
             ]
-        },
+        }, // createdProducts[0]
 
         {
             title: 'Red Capsicum Each',
@@ -50,7 +52,7 @@ db.once('open', async() => {
                 {url: 'https://cdn0.woolworths.media/content/wowproductimages/large/135306.jpg'},
                 {url: 'https://www.luckyvegetables.com.au/wp-content/uploads/2021/11/red-caps.jpg'},
             ]
-        },
+        }, // createdProducts[1]
 
         {
             title: 'Red Watermelon Cut Quarter Each',
@@ -68,7 +70,7 @@ db.once('open', async() => {
                 {url: 'https://www.enzazaden.com/us/-/media/images/enza-zaden/list-images-640x480/01_products-services/watermelon/p_2017003_red_amber.jpg'},
                 {url: 'https://hips.hearstapps.com/hmg-prod/images/repeated-watermelon-on-the-blue-background-royalty-free-image-1626974881.jpg'},
             ]
-        },
+        }, // createdProducts[2]
 
         {
             title: 'Cavendish Bananas Each',
@@ -85,7 +87,7 @@ db.once('open', async() => {
                 {url: 'https://images.theconversation.com/files/142716/original/image-20161021-1763-13xoceb.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=1200&h=675.0&fit=crop'},
                 {url: 'https://modernfarmer.com/wp-content/uploads/2022/01/shutterstock_533882299.jpg'},
             ]
-        },
+        }, // createdProducts[3]
 
         {
             title: 'Woolworths Butternut Pumpkin Cut Each',
@@ -103,7 +105,7 @@ db.once('open', async() => {
                 {url: 'https://cdn0.woolworths.media/content/wowproductimages/large/147197_1.jpg'},
                 {url: 'https://img.taste.com.au/HrwR8IZM/w720-h480-cfill-q80/taste/2020/03/april20_rice-stuffed-butternut-pumpkin-159628-1.jpg'},
             ]
-        },
+        }, // createdProducts[4]
 
         {
             title: 'Hass Avocado Each',
@@ -122,7 +124,7 @@ db.once('open', async() => {
                 {url: 'https://thumbs.dreamstime.com/b/ripe-hass-avocado-fruit-top-view-wooden-plate-spoon-161930497.jpg'},
                 {url: 'https://gourmandandgourmet.com.au/wp-content/uploads/mp/files/posts/images/shepardisthedevil.jpg'},
             ]
-        },
+        }, // createdProducts[5]
 
     ]);
 
@@ -133,68 +135,126 @@ db.once('open', async() => {
     await User.deleteMany();
 
     const createdUsers = await User.create([
+
+        {
+            name: 'lei',
+            email: 'lei@gmail.com',
+            passwordDigest: bcrypt.hashSync('chicken', 10),
+            isAdmin: true,
+        }, // createdUsers[0]
+
         {
             name: 'Andy',
             email: 'andy@gmail.com',
+            passwordDigest: bcrypt.hashSync('chicken', 10),
             isAdmin: false,
 
-        cart: [
-            {
-                quantity: 10,
-                product: createdProducts[0],
-            },
+            cart: [
+                {
+                    quantity: 10,
+                    product: createdProducts[0],
+                },
 
-            {
-                quantity: 3,
-                product: createdProducts[1],
-            },
-        ], 
+                {
+                    quantity: 3,
+                    product: createdProducts[1],
+                },
+            ], 
 
-        orderHistory: [
-            {
-                address: 'Heaths Rd, Hoppers Crossing VIC 3030',
-                items: [
-                    {
-                        quantity: 4,
-                        product: createdProducts[0],
-                    }
-                ]
-            }, // orderHistory 1
+            orderHistory: [
+                {
+                    address: 'Heaths Rd, Hoppers Crossing VIC 3030',
+                    items: [
+                        {
+                            quantity: 4,
+                            product: createdProducts[0],
+                        }
+                    ]
+                }, // orderHistory 1
 
-            {
-                address: '264 Plenty Rd, Mill Park VIC 3082',
-                items: [
-                    {
-                        quantity: 8,
-                        product: createdProducts[0],
-                    },
+                {
+                    address: '264 Plenty Rd, Mill Park VIC 3082',
+                    items: [
+                        {
+                            quantity: 8,
+                            product: createdProducts[0],
+                        },
 
-                    {
-                        quantity: 2,
-                        product: createdProducts[1],
-                    },
-                ]
-            }, // orderHistory 2
-        ]
+                        {
+                            quantity: 2,
+                            product: createdProducts[1],
+                        },
+                    ]
+                }, // orderHistory 2
+            ]
+        }, // createdUsers[1]
+
+        {
+            name: 'Angie',
+            email: 'angie@gmail.com',
+            passwordDigest: bcrypt.hashSync('chicken', 10),
+            isAdmin: false,
+
+            cart: [
+                {
+                    quantity: 3,
+                    product: createdProducts[2],
+                },
+
+                {
+                    quantity: 5,
+                    product: createdProducts[3],
+                },
+
+                {
+                    quantity: 2,
+                    product: createdProducts[4],
+                },
+            ], 
+
+            orderHistory: [
+                {
+                    address: '5 Viscount Pl, Liverpool NSW 2170',
+                    items: [
+                        {
+                            quantity: 4,
+                            product: createdProducts[0],
+                        },
+                    ]
+                }, // orderHistory 1
+
+                {
+                    address: 'Balaclava Rd, Macquarie Park NSW 2109',
+                    items: [
+                        {
+                            quantity: 2,
+                            product: createdProducts[3],
+                        },
+
+                        {
+                            quantity: 5,
+                            product: createdProducts[4],
+                        },
+
+                        {
+                            quantity: 2,
+                            product: createdProducts[5],
+                        },
+                    ]
+                }, // orderHistory 2
+            ]
+        }, // createdUsers[2]
 
 
 
-        }
+
+
     ]); // User.create()
 
 
 
 
     console.log('Users:', createdUsers);
-
-
-
-
-
-
-
-
-
 
 
     process.exit(0);

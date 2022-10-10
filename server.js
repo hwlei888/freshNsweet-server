@@ -82,26 +82,90 @@ app.get('/products/:id', async (req, res) => {
 });
 
 
-// Categories show route: GET /fruit  *********************************************************
+// Categories show route: GET /category/Fruit *********************************************************
 app.get('/category/:title', async (req, res) => {
 
     try{
         // .find ('categories.title': 'Fruit')
         //the first letter in find need to be upper case
         // const paramsTtitle = req.params.title.charAt(0).toUpperCase() + req.params.title.slice(1);
-        const fruit = await Product.find({'categories.title': {'$regex': req.params.title, '$options': 'i'}});
-        // const fruit = await Product.find({'categories.title': {"$regex": "Fresh", "$options": "i" } });
+        const categoryProducts = await Product.find({'categories.title': {'$regex': req.params.title, '$options': 'i'}});
+        // const categoryProducts = await Product.find({'categories.title': {"$regex": "Fresh", "$options": "i" } });
 
-        console.log('fruit product', fruit);
+        console.log('products of that category', categoryProducts);
 
-        // res.send({fruit});
-        res.json(fruit);
+        // res.send({categoryProducts});
+        res.json(categoryProducts);
 
     }catch(err){
         console.log('Error finding category', err );
         res.sendStatus(422);
     }
-})
+});
+
+
+// Categories show route: GET /user *********************************************************
+app.get('/user', async (req, res) => {
+
+    try{
+        const user = await User.findOne({_id: '6343b7b71c46d0568631dfbd'})
+        .populate('cart.product');
+
+        console.log('user', user);
+
+        res.json(user);
+
+    }catch(err){
+        console.log('Error finding user', err);
+        res.sendStatus(422);
+    }
+
+});
+
+
+// Categories show route: POST /user *********************************************************
+app.post('/user', async(req, res) => {
+    
+    console.log('POST/user');
+    console.log('req body:', req.body);
+
+    const newItem = {
+        quantity: 1,
+        product: req.body,
+    }
+
+    // async & await !!!!!!!
+    try{
+        const result = await User.updateOne(
+            {_id: '6343b7b71c46d0568631dfbd' },
+
+            {
+                $push:{cart: newItem}
+            },
+        ); // .updateOne()
+
+        // const resultUser =  await User.findOne({_id:'6343b7b71c46d0568631dfbd'}).populate('cart.product');
+        // console.log(resultUser);
+
+
+        
+        console.log('result of updateOne', result);
+
+        if(result.matchedCount === 0){
+            console.error('item not found for cart update', result, req.body);
+            res.sendStatus(422);
+        }
+
+        res.json(newItem);
+
+
+
+    }catch(err){
+        console.error('Error updating cart', err);
+        res.sendStatus(422);
+    }
+
+});
 
 
 
