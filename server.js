@@ -123,23 +123,23 @@ app.get('/category/:title', async (req, res) => {
 });
 
 
-// Categories show route: GET /user *********************************************************
-app.get('/user', async (req, res) => {
+// // Categories show route: GET /user *********************************************************
+// app.get('/user', async (req, res) => {
 
-    try{
-        const user = await User.findOne({_id: '6343b7b71c46d0568631dfbd'})
-        .populate('cart.product');
+//     try{
+//         const user = await User.findOne({_id: '6343b7b71c46d0568631dfbd'})
+//         .populate('cart.product');
 
-        console.log('user', user);
+//         console.log('user', user);
 
-        res.json(user);
+//         res.json(user);
 
-    }catch(err){
-        console.log('Error finding user', err);
-        res.sendStatus(422);
-    }
+//     }catch(err){
+//         console.log('Error finding user', err);
+//         res.sendStatus(422);
+//     }
 
-});
+// });
 
 
 // Categories show route: POST /user *********************************************************
@@ -162,10 +162,6 @@ app.post('/user', async(req, res) => {
                 $push:{cart: newItem}
             },
         ); // .updateOne()
-
-        // const resultUser =  await User.findOne({_id:'6343b7b71c46d0568631dfbd'}).populate('cart.product');
-        // console.log(resultUser);
-
 
         
         console.log('result of updateOne', result);
@@ -200,6 +196,7 @@ app.post('/login', async(req, res) => {
 
     try {
         const user = await User.findOne({email});
+        console.log('POST /login', user);
 
         if(user && bcrypt.compareSync(password, user.passwordDigest)){
             // correct credentials
@@ -233,7 +230,7 @@ app.use(checkAuth());
 app.use(async (req, res, next) => {
 
     try{
-        const user = await User.findOne({_id: req.auth._id});
+        const user = await User.findOne({_id: req.auth._id}).populate('cart.product');
 
         if(user === null){
             res.sendStatus( 401 );
@@ -251,10 +248,19 @@ app.use(async (req, res, next) => {
 
 // All routes below now have a 'req.current_user' defined
 
-app.get('/current_user', (req, res) => {
+app.get('/users/current', (req, res) => {
+    // console.log('GET /users/current');
+    console.log('GET /users/current', req.current_user);
     res.json(req.current_user);
 });
 
+
+// Categories show route: GET /user *********************************************************
+app.get('/user', (req, res) => {
+    
+    res.json(req.current_user);
+
+});
 
 
 
