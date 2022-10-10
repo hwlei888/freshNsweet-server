@@ -29,6 +29,25 @@ db.on('error', err => {
 });
 
 
+// Authentication *********************************************************
+
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const jwtAuthenticate = require('express-jwt');
+
+const checkAuth = () => {
+
+    return jwtAuthenticate.expressjwt({
+        secret: SERVER_SECRET_KEY, // check the token hasn't been tampered with
+        algorithms: ['HS256'],
+        requestProperty: 'auth'  // gives us 'req.auth'
+    });
+}; // checkAuth()
+
+
+const SERVER_SECRET_KEY = 'mySecretKeyHereCHICKEN';
+
+
 // API routes GET / *********************************************************
 app.get('/', (req, res) => {
     console.log('Root route was requested.');
@@ -165,6 +184,75 @@ app.post('/user', async(req, res) => {
         res.sendStatus(422);
     }
 
+});
+
+
+
+// Login route *********************************************************
+
+app.post('/login', async(req, res) => {
+
+    console.log('login:', req.body);
+
+    const {email, password} = req.body;
+    // const email = req.body.email;
+    // const password = req.body.password; 
+
+    try {
+        const user = await User.findOne({email});
+
+        if(user && bcrypt.compareSync(password, user.passwordDigest)){
+            // correct credentials
+            // res.json({success: true})
+
+            const token = jwt.sign(
+                {_id: user._id},
+                SERVER_SECRET_KEY,
+                {expiresIn: '72h'} // 5 days
+            );
+
+            res.json({token});
+
+        }else {
+            // incorrect credentials: user not found (by email), or passwords don't match
+            res.status(401).json({success: false}); // Unauthorized
+        }
+
+    }catch(err){
+        console.log('Error verifying login credentials:', err);
+        res.sendStatus(500);
+    }
+
+}); // POST /login
+
+
+// Routes below this line only work for authenticated users
+
+app.use(checkAuth());
+
+app.use(async (req, res, next) => {
+
+    try{
+        const user = await User.findOne({_id: req.auth._id});
+
+        if(user === null){
+            res.sendStatus( 401 );
+        } else {
+            req.current_user = user;
+            next();
+        }
+
+    }catch(err){
+        console.log('Error querying User in auth middleware', err);
+        res.sendStatus( 500 );
+    }
+});
+
+
+// All routes below now have a 'req.current_user' defined
+
+app.get('/current_user', (req, res) => {
+    res.json(req.current_user);
 });
 
 
