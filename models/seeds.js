@@ -25,7 +25,7 @@ db.once('open', async() => {
             introduction: 'Fresh Strawberry from Brazil',
             weight: '250g',
             price: 3.50,
-            like: 5,
+            selectQuantity: 0,
             categories: [
                 {title: 'Fruit'},
                 {title: 'New Arrival'},
@@ -42,7 +42,7 @@ db.once('open', async() => {
             introduction: 'Capsicums are seed pods. A shiny red vegetable with crisp, moist flesh. Hollow with a seeded core. Capsicums are sweet and juicy with a mild spicy flavour. Red capsicums, being riper, are sweeter than green capsicums. Shape also varies with each variety, from the more commonly found blocky shape to a pointy capsicum. Miniature varieties are sometimes available.',
             weight: 'Each',
             price: 1.73,
-            like: 1,
+            selectQuantity: 0,
             categories: [
                 {title: 'Vegetable'},
                 {title: 'Australian Grown'},
@@ -59,7 +59,7 @@ db.once('open', async() => {
             introduction: "Large oval fruit with a thick green skin and a sweet watery pink to red flesh. Often the deeper colored the flesh, the sweeter the taste. Watermelon's flesh contains about 6% sugar and it is comprised primarily of water. This seedless variety is perfect for kids.",
             weight: 'Quarter Each',
             price: 4.18,
-            like: 8,
+            selectQuantity: 0,
             categories: [
                 {title: 'Fruit'},
                 {title: 'Best Sellers'},
@@ -77,7 +77,7 @@ db.once('open', async() => {
             introduction: "Cavendish is the most popular banana variety in Australia, with firm, starchy flesh and available all year round. Ripe bananas are perfect for snacking, used in baking, fruit salads and smoothie.",
             weight: 'Each',
             price: 0.36,
-            like: 10,
+            selectQuantity: 0,
             categories: [
                 {title: 'Fruit'},
                 {title: 'Fresh Special'},
@@ -94,7 +94,7 @@ db.once('open', async() => {
             introduction: "Butternut pumpkin, or butternut squash, has hard golden-brown skin with bright orange flesh on the inside. This pumpkin is versatile and delicious with a sweet, nutty taste. A perfect allrounder, you can roast, mash, fry, bake and even air-fry it.",
             weight: 'Each',
             price: 2.60,
-            like: 15,
+            selectQuantity: 0,
             categories: [
                 {title: 'Vegetable'},
                 {title: 'Australian Grown'},
@@ -112,7 +112,7 @@ db.once('open', async() => {
             introduction: "Famous for their smooth, buttery flesh Hass avocados are a delightful addition to any meal. They have a pebbly skin that changes colour as they ripen from green to purple-black. Store firm fruit on the bench for a day or two and move to the fridge to hold in a ripe and ready to eat state once they begin to soften.",
             weight: 'Each',
             price: 2.00,
-            like: 20,
+            selectQuantity: 0,
             categories: [
                 {title: 'Vegetable'},
                 {title: 'Australian Grown'},

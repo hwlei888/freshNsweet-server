@@ -142,45 +142,45 @@ app.get('/category/:title', async (req, res) => {
 // });
 
 
-// Categories show route: POST /user *********************************************************
-app.post('/user', async(req, res) => {
+// // Categories show route: POST /user *********************************************************
+// app.post('/user', async(req, res) => {
     
-    console.log('POST/user');
-    console.log('req body:', req.body);
+//     console.log('POST/user');
+//     console.log('req body:', req.body);
 
-    const newItem = {
-        quantity: 1,
-        product: req.body,
-    }
+//     const newItem = {
+//         quantity: 1,
+//         product: req.body,
+//     }
 
-    // async & await !!!!!!!
-    try{
-        const result = await User.updateOne(
-            {_id: '6343b7b71c46d0568631dfbd' },
+//     // async & await !!!!!!!
+//     try{
+//         const result = await User.updateOne(
+//             {_id: '6343b7b71c46d0568631dfbd' },
 
-            {
-                $push:{cart: newItem}
-            },
-        ); // .updateOne()
+//             {
+//                 $push:{cart: newItem}
+//             },
+//         ); // .updateOne()
 
         
-        console.log('result of updateOne', result);
+//         console.log('result of updateOne', result);
 
-        if(result.matchedCount === 0){
-            console.error('item not found for cart update', result, req.body);
-            res.sendStatus(422);
-        }
+//         if(result.matchedCount === 0){
+//             console.error('item not found for cart update', result, req.body);
+//             res.sendStatus(422);
+//         }
 
-        res.json(newItem);
+//         res.json(newItem);
 
 
 
-    }catch(err){
-        console.error('Error updating cart', err);
-        res.sendStatus(422);
-    }
+//     }catch(err){
+//         console.error('Error updating cart', err);
+//         res.sendStatus(422);
+//     }
 
-});
+// });
 
 
 
@@ -255,13 +255,43 @@ app.get('/users/current', (req, res) => {
 });
 
 
-// Categories show route: GET /user *********************************************************
-app.get('/user', (req, res) => {
+// Categories show route: POST /user *********************************************************
+app.post('/user', async(req, res) => {
     
-    res.json(req.current_user);
+    console.log('POST/user');
+    console.log('req body:', req.body);
+
+    const newItem = {
+        quantity: req.body.quantity,
+        product: req.body.product,
+    }
+
+    // async & await !!!!!!!
+    try{
+        const result = await User.updateOne(
+            {_id: req.current_user._id },
+
+            {
+                $push:{cart: newItem}
+            },
+        ); // .updateOne()
+
+        
+        console.log('result of updateOne', result);
+
+        if(result.matchedCount === 0){
+            console.error('item not found for cart update', result, req.body);
+            res.sendStatus(422);
+        }
+
+        res.json(newItem);
+
+    }catch(err){
+        console.error('Error updating cart', err);
+        res.sendStatus(422);
+    }
 
 });
-
 
 
 
