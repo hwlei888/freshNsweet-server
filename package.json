@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "serve": "node server.js",
-
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "db:seed": "node models/seeds.js"
+    "db:seed": "node models/seeds.js",
+    "serve": "node server.js"
   },
   "engines": {
     "node": "18.x"
