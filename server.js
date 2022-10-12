@@ -255,7 +255,7 @@ app.get('/users/current', (req, res) => {
 });
 
 
-// Categories show route: POST /user *********************************************************
+//  POST /user *********************************************************
 app.post('/user', async(req, res) => {
     
     console.log('POST/user');
@@ -294,6 +294,42 @@ app.post('/user', async(req, res) => {
 });
 
 
+//  POST /user/update *********************************************************
+app.post('/user/update', async(req, res) => {
+    
+    console.log('POST/user/update');
+    console.log('req body:', req.body);
 
+    // const newItem = {
+    //     quantity: req.body.quantity,
+    //     product: req.body.product,
+    // }
+
+    // async & await !!!!!!!
+    try{
+        const result = await User.updateOne(
+            {_id: req.current_user._id },
+
+            {
+                $set:{cart: req.body}
+            },
+        ); // .updateOne()
+
+        
+        console.log('result of updateOne', result);
+
+        if(result.matchedCount === 0){
+            console.error('item not found for cart update', result, req.body);
+            res.sendStatus(422);
+        }
+
+        // res.json(req.body);
+
+    }catch(err){
+        console.error('Error updating cart', err);
+        res.sendStatus(422);
+    }
+
+});
 
 
