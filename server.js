@@ -52,7 +52,11 @@ const SERVER_SECRET_KEY = 'mySecretKeyHereCHICKEN';
 app.get('/', (req, res) => {
     console.log('Root route was requested.');
     res.json({hello: 'Welcome to freshNsweet'})
-})
+});
+
+app.listen(PORT, () => {
+    console.log(`App available at http://localhost:${PORT}`);
+});
 
 // Index of products: GET /products *********************************************************
 app.get('/products', async (req, res) => {
