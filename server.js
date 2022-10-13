@@ -1,7 +1,7 @@
 
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
 // set the CORS allow header for us on every request, for AJAX requests
 const cors = require('cors'); // check online
@@ -11,8 +11,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-app.listen(PORT, () => {
-    console.log(`Server listening at http://localhost:${PORT}...`);
+app.listen(port, () => {
+    console.log(`Server listening at http://localhost:${port}...`);
 });
 
 // Mongoose DB initialisation
