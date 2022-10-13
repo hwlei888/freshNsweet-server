@@ -34,7 +34,7 @@ db.on('error', err => {
 
 // Authentication *********************************************************
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const jwtAuthenticate = require('express-jwt');
 
