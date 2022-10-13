@@ -20,7 +20,10 @@ const mongoose = require('mongoose');
 const Product = require('./models/Product');
 const User = require('./models/User');
 
-mongoose.connect('mongodb://127.0.0.1/ba');
+require('dotenv').config();
+
+// mongoose.connect('mongodb://127.0.0.1/ba');
+mongoose.connect(process.env.MONGODB_CLOUD_URL);
 const db = mongoose.connection;
 
 db.on('error', err => {
@@ -45,7 +48,7 @@ const checkAuth = () => {
 }; // checkAuth()
 
 
-const SERVER_SECRET_KEY = 'mySecretKeyHereCHICKEN';
+const SERVER_SECRET_KEY = process.env.SERVER_SECRET_KEY;
 
 
 // API routes GET / *********************************************************

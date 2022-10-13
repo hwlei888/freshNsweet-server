@@ -5,7 +5,10 @@ const bcrypt = require('bcrypt');
 const Product = require('./Product');
 const User = require('./User');
 
-mongoose.connect('mongodb://127.0.0.1/ba'); // check online
+require('dotenv').config();
+console.log(process.env.MONGODB_CLOUD_URL)
+// mongoose.connect('mongodb://127.0.0.1/ba'); // check online
+mongoose.connect(process.env.MONGODB_CLOUD_URL);
 const db = mongoose.connection;
 
 db.on('error', err => {
