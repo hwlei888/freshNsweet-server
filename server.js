@@ -10,6 +10,7 @@ app.use(cors());
 // To get access to POSTed 'formdata' body content, we have to add a new middleware handler for it
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+app.use(express.static("public")); // stripe
 
 app.listen(PORT, () => {
     console.log(`Server listening at http://localhost:${PORT}...`);
@@ -32,11 +33,18 @@ db.on('error', err => {
 });
 
 
+
+
+
+
+
 // Authentication *********************************************************
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const jwtAuthenticate = require('express-jwt');
+
+const SERVER_SECRET_KEY = process.env.SERVER_SECRET_KEY;
 
 const checkAuth = () => {
 
@@ -48,7 +56,6 @@ const checkAuth = () => {
 }; // checkAuth()
 
 
-const SERVER_SECRET_KEY = process.env.SERVER_SECRET_KEY;
 
 
 // API routes GET / *********************************************************
@@ -127,65 +134,6 @@ app.get('/category/:title', async (req, res) => {
 });
 
 
-// // Categories show route: GET /user *********************************************************
-// app.get('/user', async (req, res) => {
-
-//     try{
-//         const user = await User.findOne({_id: '6343b7b71c46d0568631dfbd'})
-//         .populate('cart.product');
-
-//         console.log('user', user);
-
-//         res.json(user);
-
-//     }catch(err){
-//         console.log('Error finding user', err);
-//         res.sendStatus(422);
-//     }
-
-// });
-
-
-// // Categories show route: POST /user *********************************************************
-// app.post('/user', async(req, res) => {
-    
-//     console.log('POST/user');
-//     console.log('req body:', req.body);
-
-//     const newItem = {
-//         quantity: 1,
-//         product: req.body,
-//     }
-
-//     // async & await !!!!!!!
-//     try{
-//         const result = await User.updateOne(
-//             {_id: '6343b7b71c46d0568631dfbd' },
-
-//             {
-//                 $push:{cart: newItem}
-//             },
-//         ); // .updateOne()
-
-        
-//         console.log('result of updateOne', result);
-
-//         if(result.matchedCount === 0){
-//             console.error('item not found for cart update', result, req.body);
-//             res.sendStatus(422);
-//         }
-
-//         res.json(newItem);
-
-
-
-//     }catch(err){
-//         console.error('Error updating cart', err);
-//         res.sendStatus(422);
-//     }
-
-// });
-
 
 
 // Login route *********************************************************
@@ -234,7 +182,7 @@ app.use(checkAuth());
 app.use(async (req, res, next) => {
 
     try{
-        const user = await User.findOne({_id: req.auth._id}).populate('cart.product');
+        const user = await User.findOne({_id: req.auth._id}).populate('cart.product').populate('orderHistory.items.product');
 
         if(user === null){
             res.sendStatus( 401 );
@@ -254,7 +202,7 @@ app.use(async (req, res, next) => {
 
 app.get('/users/current', (req, res) => {
     // console.log('GET /users/current');
-    console.log('GET /users/current', req.current_user);
+    // console.log('GET /users/current', req.current_user);
     res.json(req.current_user);
 });
 
@@ -298,6 +246,50 @@ app.post('/user', async(req, res) => {
 });
 
 
+//  POST /user/addOrderHistory *********************************************************
+app.post('/user/addOrderHistory', async(req, res) => {
+    
+    console.log('/user/addOrderHistory');
+    console.log('/user/addOrderHistory+req body:', req.body);
+
+    const newItem = {
+        items: req.body.items,
+        address: req.body.address,
+    }
+
+    // async & await !!!!!!!
+    try{
+        const result = await User.updateOne(
+            {_id: req.current_user._id },
+
+            {
+                $push:{orderHistory: newItem},
+                $set:{cart:[]}
+            },
+        ); // .updateOne()
+
+        
+        console.log('result of updateOne', result);
+        console.log('GET /user/addOrderHistory', req.current_user);
+
+
+        if(result.matchedCount === 0){
+            console.error('item not found for cart update', result, req.body);
+            res.sendStatus(422);
+        }
+
+        // res.json(newItem);
+
+    }catch(err){
+        console.error('Error updating cart', err);
+        res.sendStatus(422);
+    }
+
+});
+
+
+
+
 //  POST /user/update *********************************************************
 app.post('/user/update', async(req, res) => {
     
@@ -335,5 +327,72 @@ app.post('/user/update', async(req, res) => {
     }
 
 });
+
+
+
+
+// Stripe *********************************************************
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
+const stripe = require('stripe')(STRIPE_SECRET_KEY);
+
+const calculateOrderAmount = (items) => {
+    // Replace this constant with a calculation of the order's amount
+    // Calculate the order total on the server to prevent
+    // people from directly manipulating the amount on the client
+    let totalAmount = 0;
+    items.map(item => {
+        totalAmount += Number((Number(item.quantity) * Number(item.product.price) * 100).toFixed(2))
+    })
+
+    return totalAmount;
+  };
+
+  //paymentIntents run before currentuser, in frontend need to make sure currentuser is there then route the component
+
+app.post("/create-payment-intent", async (req, res) => {
+
+    try{
+
+        const items = req.current_user.cart
+        // console.log('/create-payment-intent-items', items);
+
+        // Alternatively, set up a webhook to listen for the payment_intent.succeeded event
+        // and attach the PaymentMethod to a new Customer
+
+        // Create a PaymentIntent with the order amount and currency
+        const paymentIntent = await stripe.paymentIntents.create({
+            setup_future_usage: "off_session",
+            amount: calculateOrderAmount(items),
+            currency: "aud",
+            automatic_payment_methods: {
+                enabled: true,
+            },
+        });
+        
+        // console.log('might be find', paymentIntent);
+
+        res.send({
+            clientSecret: paymentIntent.client_secret,
+        });
+    
+    }catch(err){
+        console.error('Error create-payment-intent', err);
+        res.sendStatus(422);
+    }
+
+});
+
+// app.listen(4242, () => console.log("Node server listening on port 4242!")); // 
+   
+
+
+
+
+
+
+
+
+
+
 
 
