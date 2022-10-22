@@ -7,7 +7,7 @@
 
 A project as part of the General Assembly Software Intensive
 
-**Overview**:
+## Overview:
 
 - Fresh N Sweet is an online shopping site where users can buy fresh fruit and
 vegetables online and deliver them to users' addresses after payment.
@@ -22,7 +22,7 @@ many as they want.
 
 It is a full-stack web project that uses stripe to support payment system, alongside axios HTTP requests.
 
-**Tech Stack**:
+## Tech Stack:
 
 Front-end: React.js, Hooks, Redux, Stripe, Axios, CSS, Bootstrap
 
