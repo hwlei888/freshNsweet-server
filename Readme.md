@@ -1,6 +1,6 @@
 # Welcome to Fresh N Sweet!
 
-## An E-Commerce platform using Reat Hooks and MongoDB
+### An E-Commerce platform using Reat Hooks and MongoDB
 
 
 #### Find the main README [here](https://github.com/hwlei888/freshNsweet-frontend) and Visit the site on [HEROKU HERE](https://shrouded-bayou-28028.herokuapp.com)
